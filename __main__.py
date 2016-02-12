@@ -6,19 +6,19 @@ import skflow
 import sys
 g = 0.9
 append = lambda x, y: np.append(x,y)
-# regressor = skflow.TensorFlowDNNRegressor(hidden_units=[10,10],learning_rate=0.01, verbose=int(sys.argv[2]))
-# regressor.fit(np.random.randn(1601, 1), append([1.], np.zeros((1600, 1))))
-regressor = skflow.TensorFlowEstimator.restore('./regressor')
+regressor = skflow.TensorFlowDNNRegressor(hidden_units=[20,10, 10, 15,20],learning_rate=0.01, verbose=int(sys.argv[2]))
+regressor.fit(np.random.randn(1601, 1), append([1.], np.zeros((1600, 1))))
+# regressor = skflow.TensorFlowEstimator.restore('./regressor')
 def Q(s, a):
     return regressor.predict(append(s, a))
 
 def detectState(ale):
     return cv2.resize(ale.getScreenGrayscale(), (40,40))
 
-ale = ALEInterface()
-ale.loadROM("breakout.bin")
-actionSet = ale.getMinimalActionSet()
 while True:
+    ale = ALEInterface()
+    ale.loadROM("breakout.bin")
+    actionSet = ale.getMinimalActionSet()
     while not ale.game_over():
         if sys.argv[1] == 'disp':
             cv2.imshow('', cv2.resize(ale.getScreenRGB(), (600,600)))
